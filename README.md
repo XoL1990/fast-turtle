@@ -11,6 +11,10 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - code cache
 - mobile
 
+## Demo
+
+https://fast-turtle.netlify.app
+
 ## Info
 
 ### Development server
