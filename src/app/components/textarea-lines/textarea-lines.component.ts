@@ -44,6 +44,8 @@ export class TextareaLinesComponent implements OnInit, OnDestroy {
   private convertToText(str = '') {
     // Ensure string.
     let value = String(str);
+
+    const divIndex = value.indexOf('<div>');
   
     // Convert encoding.
     value = value.replace(/&nbsp;/gi, ' ');
@@ -62,10 +64,8 @@ export class TextareaLinesComponent implements OnInit, OnDestroy {
     value = value.replace(/<(.*?)>/g, '');
   
     // Trim each line.
-    value = value
-      .split('\n')
-      .map((line) => line.trim())
-      .join('\n');
+    const splitted = value.split('\n');
+    value = splitted.map((line) => line.trim()).join('\n');
   
     // No more than 2x newline, per "paragraph".
     //value = value.replace(/\n\n+/g, '\n\n');
@@ -74,6 +74,10 @@ export class TextareaLinesComponent implements OnInit, OnDestroy {
     // Clean up spaces.
     value = value.replace(/[ ]+/g, ' ');
     //value = value.trim();
+
+    if (divIndex == 0) {
+      value = value.replace('\n', '');
+    }
   
     // Expose string.
     return value;

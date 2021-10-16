@@ -12,6 +12,8 @@ const enum Status {
   styleUrls: ['./resizable-draggable.component.scss']
 })
 export class ResizableDraggableComponent implements OnInit, AfterViewInit {
+  showEditor = true;
+
   @Input('width') public width: number = 400;
   @Input('height') public height: number = 700;
   @Input('left') public left: number = 20;
@@ -25,30 +27,32 @@ export class ResizableDraggableComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {}
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.loadBox();
   }
 
-  private loadBox(){
+  private loadBox() {
     const { left, top } = this.box.nativeElement.getBoundingClientRect();
     this.boxPosition = { left, top };
   }
 
-  setStatus(event: MouseEvent, status: number){
-    if(status === 1) event.stopPropagation();
-    else if(status === 2) this.mouseClick = { x: event.clientX, y: event.clientY, left: this.left, top: this.top };
-    else this.loadBox();
-    this.status = status;
+  setStatus(event: MouseEvent, status: number) {
+    if (window.innerWidth > 768) { // TODO: move magic number to settings
+      if(status === 1) event.stopPropagation();
+      else if(status === 2) this.mouseClick = { x: event.clientX, y: event.clientY, left: this.left, top: this.top };
+      else this.loadBox();
+      this.status = status;
+    }
   }
 
   @HostListener('window:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent){
+  onMouseMove(event: MouseEvent) {
     this.mouse = { x: event.clientX, y: event.clientY };
     if(this.status === Status.RESIZE) this.resize();
     else if(this.status === Status.MOVE) this.move();
   }
 
-  private resize(){
+  private resize() {
     let w = Number(this.mouse.x > this.boxPosition.left) ? this.mouse.x - this.boxPosition.left : 0;
     if (w < 200) {
       w = 200;
@@ -62,7 +66,7 @@ export class ResizableDraggableComponent implements OnInit, AfterViewInit {
     this.height = h;
   }
 
-  private move(){
+  private move() {
     this.left = this.mouseClick.left + (this.mouse.x - this.mouseClick.x);
     this.top = this.mouseClick.top + (this.mouse.y - this.mouseClick.y);
   }
