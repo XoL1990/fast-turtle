@@ -1,6 +1,7 @@
 {
   "name": "fast-turtle",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "author": "Adam Małyszko <malyszko.adam@gmail.com>",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

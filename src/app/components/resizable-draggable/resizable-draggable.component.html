@@ -1,0 +1,16 @@
+<div #box class="resizable-draggable" 
+    [style.width.px]="width" 
+    [style.height.px]="height" 
+    [style.transform]="'translate3d('+ left + 'px,' + top + 'px,' + '0px)'"
+    [class]="{active: status === 1 || status === 2, drag: status === 2, resize: status === 1}"
+    (window:mouseup)="setStatus($event, 0)"
+>
+    <div class="panel">
+        <div class="header" (mousedown)="setStatus($event, 2)">Editor</div>
+        <ng-content></ng-content>
+    </div>
+    <div class="resize-action" (mousedown)="setStatus($event, 1)"></div>
+    <span class="info-width">{{width | number:'1.0-0'}}px</span>
+    <span class="info-height">{{height | number:'1.0-0'}}px</span>
+    <span class="info-position">{{left + width / 2 | number:'1.0-0'}}px, {{top + height / 2 | number:'1.0-0'}}px</span>
+</div>

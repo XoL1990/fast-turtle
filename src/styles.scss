@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+$font-color: #ffffff;
+$background-color: #130069;
+
+body {
+    color: $font-color;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: $background-color;
+    height: 100vh;
+    width: 100vw;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

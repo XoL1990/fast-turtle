@@ -1,0 +1,4 @@
+<div class="lines">
+    <span *ngFor="let line of lines; let i = index" [class.error]="line.hasError">{{i + 1}}</span>
+</div>
+<div #textarea contenteditable="true" (input)="onTextChange($event)" class="text"></div>

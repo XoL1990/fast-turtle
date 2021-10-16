@@ -1,0 +1,44 @@
+:host {
+    overflow: hidden;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    flex: 1 0 0;
+
+    .lines, .text {
+        height: fit-content;
+        font-size: 16px;
+        line-height: 26px;
+    }
+
+    .lines {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        background-color: #7fa0be;
+        span {
+            padding: 0 10px;
+            width: 100%;
+            text-align: end;
+
+            &.error {
+                background-color: #f00;
+            }
+        }
+    }
+
+    .text {
+        width: 100%;
+        min-height: 100%;
+        border: 0px none;
+        outline: none;
+        background-color: #d3eaff;
+        color: #000;
+        white-space: pre;
+        overflow-wrap: normal;
+        overflow-x: auto;
+        overflow-y: visible;
+        cursor: text;
+    }
+}
