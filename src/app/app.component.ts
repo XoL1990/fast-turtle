@@ -37,6 +37,7 @@ export class AppComponent implements AfterViewInit {
   private currentLinesToDraw: ParsedLine[];
   private currentPosition: Vector;
   private currentRotation: number;
+  private currentSpeed: number;
   private penOff: boolean;
 
   private drawTimeout: any = null;
@@ -102,6 +103,7 @@ export class AppComponent implements AfterViewInit {
     ctx.strokeStyle ='#000';
     this.currentPosition = {x: centerX, y: centerY};
     this.currentRotation = 0;
+    this.currentSpeed = AppComponent.speed;
     this.penOff = false;
   }
 
@@ -184,6 +186,9 @@ export class AppComponent implements AfterViewInit {
       case Command.direction:
         turtleRotation = -this.currentRotation + currentLineToDraw.params[0] * Math.PI / 180;
         break;
+      case Command.speed:
+        this.currentSpeed = currentLineToDraw.params[0];
+        break;
       case Command.test:
         this.test();
         return;
@@ -236,14 +241,14 @@ export class AppComponent implements AfterViewInit {
 
     this.currentLineIndexToDraw++;
 
-    if (skipNextFrame || AppComponent.speed === 0) {
+    if (skipNextFrame || this.currentSpeed === 0) {
       this.drawStep();
       return;
     }
 
     this.drawTimeout = setTimeout(() => {
       this.drawFrameRequest = requestAnimationFrame(this.drawStep.bind(this));
-    }, AppComponent.speed);
+    }, this.currentSpeed);
   }
 
   private drawTurtle(x: number, y: number) {

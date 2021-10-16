@@ -15,6 +15,7 @@ export enum Command {
   pendown,
   penwidth,
   pencolor,
+  speed,
   // testing only xD - sorry for politics
   test
 }
