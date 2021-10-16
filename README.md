@@ -5,11 +5,9 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Todo
 - docker
 - tests
-- live editor - show changes as you type
 - help for users
 - settings cache
 - code cache
-- mobile
 
 ## Demo
 

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TextareaLinesComponent } from './components/textarea-lines/textarea-lines.component';
 import { Command, InterpreterService, ParsedLine } from './services/interpreter.service';
 import { Helpers } from './utils/helpers';
@@ -29,6 +30,7 @@ export class AppComponent implements AfterViewInit {
   private showTest = false;
 
   hideTurtle = false;
+  live = false;
 
   private ctx: CanvasRenderingContext2D | null;
   private ctxTurtle: CanvasRenderingContext2D | null;
@@ -43,6 +45,8 @@ export class AppComponent implements AfterViewInit {
   private drawTimeout: any = null;
   private drawFrameRequest = 0;
 
+  private liveSubscription: Subscription;
+
   constructor(private interpreterService: InterpreterService) { }
 
   ngAfterViewInit() {
@@ -52,6 +56,11 @@ export class AppComponent implements AfterViewInit {
   }
 
   onRunHandle() {
+    this.live = false;
+    if (this.liveSubscription) {
+      this.liveSubscription.unsubscribe();
+    }
+
     if (!this.ctx || !this.ctxTurtle) {
       throw new Error("Canvas context is null");
     }
@@ -66,6 +75,28 @@ export class AppComponent implements AfterViewInit {
       return;
     }
     this.draw(lines);
+  }
+
+  onLiveHandle() {
+    if (!this.live) {
+      this.live = true;
+
+      if (!this.ctx || !this.ctxTurtle) {
+        throw new Error("Canvas context is null");
+      }
+
+      this.hideTurtle = true;
+
+      this.liveSubscription = this.interpreterService.getLinesObservable().subscribe(() => {
+        this.clear();
+        const lines = this.interpreterService.getValidLines();
+        if (!lines || !lines.length) {
+          this.drawError();
+          return;
+        }
+        this.draw(lines);
+      });
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -105,10 +136,10 @@ export class AppComponent implements AfterViewInit {
     this.currentRotation = 0;
     this.currentSpeed = AppComponent.speed;
     this.penOff = false;
+    this.currentLineIndexToDraw = 0;
   }
 
   private draw(lines: ParsedLine[]) {
-    this.currentLineIndexToDraw = 0;
     this.currentLinesToDraw = lines;
 
     if (this.drawTimeout) {
@@ -241,7 +272,7 @@ export class AppComponent implements AfterViewInit {
 
     this.currentLineIndexToDraw++;
 
-    if (skipNextFrame || this.currentSpeed === 0) {
+    if (skipNextFrame || this.live || this.currentSpeed === 0) {
       this.drawStep();
       return;
     }

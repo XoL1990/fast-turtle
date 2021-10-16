@@ -33,6 +33,17 @@ export class ParsedLine {
     this.command = Command[line[0].toLowerCase() as keyof typeof Command];
     this.params = line.filter((v, i) => i > 0).map(v => Number(v));
   }
+
+  public compare(line: ParsedLine) {
+    if (this.command !== line.command) return false;
+    if (this.params.length !== line.params.length) return false;
+    
+    for (let i = 0; i < this.params.length; i++) {
+      if (this.params[i] !== line.params[i]) return false;
+    }
+
+    return true;
+  }
 }
 
 @Injectable({

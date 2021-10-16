@@ -4,6 +4,9 @@
 <app-resizable-draggable>
   <div class="content">
     <app-textarea-lines #textarea></app-textarea-lines>
-    <button (click)="onRunHandle()">Run</button>
+    <div class="buttons">
+      <button (click)="onRunHandle()" [class.active]="!live">Run</button>
+      <button (click)="onLiveHandle()" [class.active]="live">Live</button>
+    </div>
   </div>
 </app-resizable-draggable>
