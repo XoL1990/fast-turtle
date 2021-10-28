@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TextareaLinesComponent } from './components/textarea-lines/textarea-lines.component';
@@ -47,7 +48,7 @@ export class AppComponent implements AfterViewInit {
 
   private liveSubscription: Subscription;
 
-  constructor(private interpreterService: InterpreterService) { }
+  constructor(private interpreterService: InterpreterService, private httpService: HttpClient) { }
 
   ngAfterViewInit() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
@@ -97,6 +98,15 @@ export class AppComponent implements AfterViewInit {
         this.draw(lines);
       });
     }
+  }
+
+  save() {
+    this.ctx!.resetTransform();
+    this.ctx!.drawImage(this.canvasTurtle.nativeElement, 0, 0);
+    const base64 = (this.canvas.nativeElement as HTMLCanvasElement).toDataURL();
+    this.httpService.post('http://localhost:3000/save-image', {
+      data: base64
+    }).toPromise();
   }
 
   @HostListener('window:resize', ['$event'])
